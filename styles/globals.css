@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  Design Tokens — CSS variables.
+
+  This is a single, deliberate identity (near-black canvas, electric-cyan
+  signal accent) rather than a light/dark pair — the app has no theme
+  toggle anywhere (app/layout.tsx hardcodes className="dark") so the
+  previous light-mode branch was unreachable dead weight and has been
+  removed. Spacing stays here per ETAPE 11; radius/shadow/typography/z-index/
+  motion stay theme-invariant in tailwind.config.ts.
+*/
+
+:root {
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  /* Canvas — near-black, not pure black (Apple/Linear never use #000 outright) */
+  --color-background: #08090a;
+  --color-surface: #0f1113;
+  --color-surface-raised: #16181b;
+  --color-disabled-surface: #131518;
+
+  /* Hairlines — barely-there at rest, brighten deliberately on hover/focus */
+  --color-border: #212428;
+  --color-border-strong: #34383d;
+  --color-divider: #1a1c1f;
+  --color-hover-surface: #16181b;
+
+  /* Type hierarchy — soft white down through two dim grays */
+  --color-text-primary: #f3f4f6;
+  --color-text-secondary: #8b929b;
+  --color-text-tertiary: #787d84;
+
+  /* The signal — one electric cyan accent, used deliberately, never as a wash */
+  --color-accent: #2ee6ff;
+  --color-accent-strong: #8ef3ff;
+  --color-accent-ink: #06272c;
+
+  /* Semantic (rarely used, kept for Badge tones) */
+  --color-success: #22c55e;
+  --color-warning: #f0b429;
+  --color-danger: #f0555a;
+  --color-info: #2ee6ff;
+
+  /* Glass — for the Navbar's scrolled state and the availability badge */
+  --glass-background: rgba(8, 9, 10, 0.72);
+  --glass-border: rgba(255, 255, 255, 0.08);
+
+  /* Spacing (ETAPE 13 scale: 4 8 12 16 20 24 32 40 48 56 64 80 96 128) */
+  --space-4: 0.25rem;
+  --space-8: 0.5rem;
+  --space-12: 0.75rem;
+  --space-16: 1rem;
+  --space-20: 1.25rem;
+  --space-24: 1.5rem;
+  --space-32: 2rem;
+  --space-40: 2.5rem;
+  --space-48: 3rem;
+  --space-56: 3.5rem;
+  --space-64: 4rem;
+  --space-80: 5rem;
+  --space-96: 6rem;
+  --space-128: 8rem;
+}
+
+@layer base {
+  html {
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

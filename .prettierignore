@@ -1,0 +1,9 @@
+# Specification is the frozen single source of truth — never auto-formatted.
+MASTER_SPECIFICATION.md
+
+# Standard ignores
+node_modules
+.next
+out
+build
+package-lock.json
