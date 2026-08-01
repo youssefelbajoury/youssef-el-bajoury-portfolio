@@ -2,9 +2,12 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 
-import { SectionKicker } from "@/components/shared/SectionKicker";
+import { buildRevealVariants, REVEAL_VIEWPORT } from "@/components/shared/revealMotion";
+import { SectionHeading } from "@/components/shared/SectionHeading";
+import { SectionShell } from "@/components/shared/SectionShell";
+import { SHOWCASE_PROJECTS } from "@/data/projects/projects";
+import { CaseStudyProvider } from "@/features/showcase/case-studies";
 
-import { buildRevealVariants, REVEAL_VIEWPORT } from "./components/revealMotion";
 import { RolexExperienceShowcase } from "./components/RolexExperienceShowcase";
 import { SmartHealthRoomShowcase } from "./components/SmartHealthRoomShowcase";
 import { WorkInProgressTile } from "./components/WorkInProgressTile";
@@ -26,43 +29,41 @@ export function ProjectShowcase() {
   const { container, item } = buildRevealVariants(prefersReducedMotion);
 
   return (
-    <section id="projects" className="relative overflow-hidden border-t border-border">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_0%,rgb(46_230_255_/_7%),transparent_58%)]"
-      />
+    <SectionShell id="projects" labelledBy="projects-title" air="tall">
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={REVEAL_VIEWPORT}
+        variants={container}
+      >
+        <motion.div variants={item}>
+          <SectionHeading
+            index="01"
+            kicker="Featured Projects"
+            titleId="projects-title"
+            title="Two projects, end to end."
+            statement="Not a rail of thumbnails. Two systems I can walk through line by line — what the problem was, how the architecture answers it, and what I would build differently now."
+          />
+        </motion.div>
+      </motion.div>
 
-      <div className="relative mx-auto max-w-content px-24 py-128 md:px-32">
-        <motion.header
-          initial="hidden"
-          whileInView="visible"
-          viewport={REVEAL_VIEWPORT}
-          variants={container}
-          className="max-w-readable"
-        >
-          <motion.div variants={item}>
-            <SectionKicker>Featured Projects</SectionKicker>
-          </motion.div>
-
-          <motion.h2 variants={item} className="mt-24 text-title font-semibold text-text-primary">
-            Two projects, end to end.
-          </motion.h2>
-
-          <motion.p variants={item} className="mt-24 text-paragraph-lg text-text-secondary">
-            Not a gallery. Two systems I can walk through line by line — what the problem was, how
-            the architecture answers it, and what I would build differently now.
-          </motion.p>
-        </motion.header>
-
+      {/*
+        The provider owns which case study is open, and nothing else. It wraps
+        the tiles rather than living inside them so that opening a study is a
+        section-level event: one viewer exists at a time, mounted next to the
+        tiles rather than inside one of them, which is what lets it be full
+        screen without any tile needing to know it.
+      */}
+      <CaseStudyProvider projects={SHOWCASE_PROJECTS}>
         <div className="mt-80 flex flex-col gap-128">
           <SmartHealthRoomShowcase />
           <RolexExperienceShowcase />
         </div>
+      </CaseStudyProvider>
 
-        <div className="mt-96">
-          <WorkInProgressTile />
-        </div>
+      <div className="mt-96">
+        <WorkInProgressTile />
       </div>
-    </section>
+    </SectionShell>
   );
 }

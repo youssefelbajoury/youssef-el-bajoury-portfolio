@@ -1,4 +1,4 @@
-import { ContactPreview } from "@/features/conversion/contact-hub";
+import { ContactPreview, LocationPanel } from "@/features/conversion/contact-hub";
 import { SkillsPreview } from "@/features/credibility/skills-architecture";
 import { AboutPreview } from "@/features/marketing/about";
 import { Hero } from "@/features/marketing/hero";
@@ -11,6 +11,7 @@ export default function HomePage() {
       <ProjectShowcase />
       <AboutPreview />
       <SkillsPreview />
+      <LocationPanel />
       <ContactPreview />
     </main>
   );

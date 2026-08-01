@@ -2,8 +2,10 @@ import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { CropMarks, FrameRule } from "@/components/shared/PageFrame";
 import { SectionKicker } from "@/components/shared/SectionKicker";
 import { SHOWCASE_PROJECTS } from "@/data/projects/projects";
+import { STATUS_LENS, STATUS_LENS_SHADOW } from "@/styles/material";
 
 import type { Metadata } from "next";
 import type { CSSProperties } from "react";
@@ -56,45 +58,64 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
 
   return (
     <main style={accentVars}>
-      <div className="mx-auto max-w-content px-24 py-128 md:px-32">
-        <Link
-          href="/#projects"
-          className="inline-flex items-center gap-8 rounded-full text-paragraph-sm text-text-secondary transition-colors duration-medium ease-standard hover:text-text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-border-strong"
-        >
-          <ArrowLeft className="size-16" aria-hidden />
-          Back to projects
-        </Link>
+      <div className="mx-auto max-w-content px-24 py-96 md:px-32">
+        <div className="relative">
+          {/* The same drafted sheet every section on the home page is set on. */}
+          <CropMarks />
+          <FrameRule withTicks />
 
-        <div className="mt-48 max-w-readable">
-          <SectionKicker>{project.discipline}</SectionKicker>
+          <div className="py-56 md:py-72">
+            <Link
+              href="/#projects"
+              className="inline-flex items-center gap-8 rounded-sm font-mono text-[11px] uppercase tracking-[0.2em] text-text-secondary transition-colors duration-medium ease-premium hover:text-text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-border-strong"
+            >
+              <ArrowLeft className="size-16" strokeWidth={1.25} aria-hidden />
+              Back to projects
+            </Link>
 
-          <h1 className="mt-24 text-title font-semibold text-text-primary">{project.title}</h1>
+            <div className="mt-48 max-w-readable">
+              <SectionKicker>{project.discipline}</SectionKicker>
 
-          <div className="mt-24 flex flex-wrap gap-8">
-            <span className="rounded-full border border-[rgb(var(--project-accent-rgb)/35%)] bg-[rgb(var(--project-accent-rgb)/10%)] px-12 py-4 font-mono text-badge tracking-wide text-[var(--project-accent-bright)]">
-              {project.context}
-            </span>
-            <span className="rounded-full border border-border px-12 py-4 font-mono text-badge tracking-wide text-text-tertiary">
-              {project.year}
-            </span>
+              <h1 className="mt-24 text-title font-medium tracking-tight text-text-primary">
+                {project.title}
+              </h1>
+
+              <div className="mt-24 flex flex-wrap gap-8">
+                <span className="rounded-sm border border-[rgb(var(--project-accent-rgb)/28%)] bg-[rgba(255,255,255,0.018)] px-12 py-4 font-mono text-badge tracking-wide text-[var(--project-accent-bright)] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)]">
+                  {project.context}
+                </span>
+                <span className="rounded-sm border border-[rgba(255,255,255,0.09)] px-12 py-4 font-mono text-badge tracking-wide text-text-tertiary shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)]">
+                  {project.year}
+                </span>
+              </div>
+
+              <p className="mt-32 text-paragraph-lg text-text-secondary">{project.description}</p>
+            </div>
+
+            <div
+              className="mt-64 rounded-sm border border-dashed p-32"
+              style={{
+                borderColor: "rgba(255,255,255,0.09)",
+                background: "rgba(255,255,255,0.012)",
+              }}
+            >
+              <p className="flex items-center gap-12 font-mono text-[11px] uppercase tracking-[0.24em] text-text-tertiary">
+                <span
+                  aria-hidden
+                  className="size-[6px] shrink-0 rounded-full"
+                  style={{ background: STATUS_LENS, boxShadow: STATUS_LENS_SHADOW }}
+                />
+                In Progress
+              </p>
+              <p className="mt-16 max-w-readable text-paragraph text-text-secondary">
+                The full case study — problem, research, architecture, engineering decisions, and
+                lessons learned — is being written. It will replace this page rather than sit
+                alongside it.
+              </p>
+            </div>
           </div>
 
-          <p className="mt-32 text-paragraph-lg text-text-secondary">{project.description}</p>
-        </div>
-
-        <div className="mt-64 rounded-xl border border-dashed border-border bg-surface/60 p-32">
-          <p className="flex items-center gap-8 font-mono text-label uppercase tracking-[0.24em] text-text-tertiary">
-            <span
-              aria-hidden
-              className="size-8 animate-node-pulse rounded-full bg-[var(--project-accent)]"
-            />
-            In Progress
-          </p>
-          <p className="mt-16 max-w-readable text-paragraph text-text-secondary">
-            The full case study — problem, research, architecture, engineering decisions, and
-            lessons learned — is being written. It will replace this page rather than sit alongside
-            it.
-          </p>
+          <FrameRule />
         </div>
       </div>
     </main>

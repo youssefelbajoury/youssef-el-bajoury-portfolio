@@ -2,7 +2,8 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 
-import { buildRevealVariants, REVEAL_VIEWPORT } from "./revealMotion";
+import { buildRevealVariants, REVEAL_VIEWPORT } from "@/components/shared/revealMotion";
+import { RULE_COLOR, STATUS_LENS, STATUS_LENS_SHADOW } from "@/styles/material";
 
 import type { CSSProperties } from "react";
 
@@ -37,7 +38,8 @@ export function WorkInProgressTile() {
     >
       <motion.div
         variants={item}
-        className="relative overflow-hidden rounded-xl border border-dashed border-border bg-surface/60 p-32 md:p-48"
+        className="relative overflow-hidden rounded-sm border border-dashed p-32 md:p-48"
+        style={{ borderColor: "rgba(255,255,255,0.09)", background: "rgba(255,255,255,0.012)" }}
       >
         {/* Hatching — the only texture on the page, and only here, because this
             is the one surface that is meant to read as unfinished. */}
@@ -48,10 +50,13 @@ export function WorkInProgressTile() {
 
         <div className="relative flex flex-col gap-24 md:flex-row md:items-center md:justify-between">
           <div>
-            <p className="flex items-center gap-8 font-mono text-label uppercase tracking-[0.24em] text-text-tertiary">
+            <p className="flex items-center gap-12 font-mono text-[11px] uppercase tracking-[0.24em] text-text-tertiary">
+              {/* The site's one lamp specification, at the site's one accent —
+                  lit from the upper left, not a flat disc of colour. */}
               <span
                 aria-hidden
-                className="size-8 animate-node-pulse rounded-full bg-[var(--project-accent)]"
+                className="size-[6px] shrink-0 rounded-full"
+                style={{ background: STATUS_LENS, boxShadow: STATUS_LENS_SHADOW }}
               />
               Work in Progress
             </p>
@@ -68,7 +73,8 @@ export function WorkInProgressTile() {
           {/* Indeterminate hairline — status without a fabricated percentage */}
           <div
             aria-hidden
-            className="relative h-px w-full overflow-hidden bg-border md:w-[14rem] md:shrink-0"
+            className="relative h-px w-full overflow-hidden md:w-[14rem] md:shrink-0"
+            style={{ backgroundColor: RULE_COLOR }}
           >
             <span className="absolute inset-y-0 left-0 w-1/3 animate-wip-sweep bg-gradient-to-r from-transparent via-[var(--project-accent)] to-transparent" />
           </div>

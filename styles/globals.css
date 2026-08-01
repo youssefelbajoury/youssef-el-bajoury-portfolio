@@ -49,6 +49,57 @@
   --glass-background: rgba(8, 9, 10, 0.72);
   --glass-border: rgba(255, 255, 255, 0.08);
 
+  /*
+    Easing.
+
+    Two curves, and the difference between them is what they are describing.
+
+    --ease-apple is a decelerate: it leaves immediately at speed and spends most
+    of its time arriving. Everything that appears, opens or reveals uses it,
+    because that profile is what reads as an object being *placed* rather than
+    played. It is the curve under every sheet and every card in Apple's and
+    Linear's work, and it is one step further than the `premium` bezier already
+    in the Tailwind theme — same intent, more front-loaded.
+
+    --ease-spring is not a bezier at all. It is a damped harmonic oscillator,
+    integrated at twenty points: mass 1, stiffness 340, damping 26, which is
+    ζ = 0.71 settling in 478ms with a 4.4% overshoot. On a 4px hover lift that
+    overshoot is under a fifth of a pixel and nobody will ever see it — the
+    reason to spend a `linear()` on this is the velocity profile, not the
+    overshoot. A spring accelerates hard, decelerates long and eases out of its
+    own momentum; a cubic is symmetric in a way that reads as a mechanism. Hover
+    is where that difference is felt, because it is the one motion a reader
+    triggers themselves and can compare against their own hand.
+
+    Both live here rather than in tailwind.config.ts because the motion below
+    needs them in plain CSS, and a second copy of a curve is a curve that will
+    drift.
+  */
+  --ease-apple: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-spring: linear(
+    0,
+    0.0786,
+    0.2519,
+    0.4515,
+    0.6368,
+    0.7881,
+    0.8995,
+    0.9736,
+    1.0172,
+    1.0382,
+    1.044,
+    1.0409,
+    1.0334,
+    1.0246,
+    1.0164,
+    1.0096,
+    1.0046,
+    1.0013,
+    0.9993,
+    0.9983,
+    0.9981
+  );
+
   /* Spacing (ETAPE 13 scale: 4 8 12 16 20 24 32 40 48 56 64 80 96 128) */
   --space-4: 0.25rem;
   --space-8: 0.5rem;
@@ -73,6 +124,124 @@
   }
 }
 
+/* ---------------------------------------------------------------------------
+   Site motion that cannot be expressed as a Tailwind utility.
+
+   Two things live here, for one reason each: the staggered reveal is driven by
+   a computed `--reveal-index`, which is a per-element delay no utility can
+   carry; and a modal <dialog> needs `@starting-style` and `transition-behavior:
+   allow-discrete` to animate at all. Everything else on the page animates
+   through the Tailwind keyframes or Framer Motion.
+
+   THE RULE THIS BLOCK OBEYS: transform and opacity, nothing else. Both are
+   composited, so every animation below runs off the main thread and none of
+   them can invalidate layout.
+--------------------------------------------------------------------------- */
+
+@layer components {
+  /* ---- Progressive reveal ------------------------------------------------
+     One keyframe, one stagger, driven by a `--reveal-index` each element sets
+     for itself. The delay is computed rather than written per element, so
+     inserting a row cannot desynchronise the sequence.
+
+     `backwards` fill is load-bearing exactly as it is in the Hero — it holds
+     the 0% frame through the delay, so the last element in a stagger is already
+     invisible at first paint instead of appearing and then starting to animate.
+
+     Everything here is inside `prefers-reduced-motion: no-preference`, not
+     merely shortened by the global rule below. A reveal that starts at opacity
+     zero and is *waiting* for an observer is content that does not exist yet;
+     for a reader who has asked for less motion it should never have been
+     hidden in the first place. */
+  @media (prefers-reduced-motion: no-preference) {
+    [data-reveal="out"] > * {
+      opacity: 0;
+      transform: translate3d(0, 20px, 0);
+    }
+
+    [data-reveal="in"] > * {
+      animation: reveal-rise 820ms var(--ease-apple) backwards;
+      animation-delay: calc(var(--reveal-index, 0) * 90ms);
+    }
+  }
+
+  @keyframes reveal-rise {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 20px, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  /* ---- The loader's ceiling, without JavaScript ---------------------------
+     The one animation on this site that is deliberately not Framer's, and the
+     reason is that it has to run in the case where Framer does not exist yet.
+
+     The loading overlay is server-rendered opaque so the portfolio can never
+     flash into view before it is ready. Everything that dismisses it lives in
+     React — which means that on a slow connection the overlay is governed by
+     when the *bundle* arrives, not by when the *page* is ready. Measured on an
+     emulated 400kbps link, the document was painted in a couple of seconds and
+     the overlay sat over it until 11.2s, because that is when hydration ran.
+     A three-second ceiling enforced by the thing being waited for is not a
+     ceiling.
+
+     So the ceiling is armed by the parser instead. The class is in the HTML,
+     the delay starts at first paint, and if React has not taken over by then
+     the overlay fades itself out and stops intercepting the page. When React
+     does arrive in time it removes the class and Framer owns the exit as
+     normal; when it arrives late it finds the work already done and unmounts
+     without re-showing anything. See PortfolioLoader.tsx.
+
+     THE DELAY MUST EQUAL MAX_VISIBLE_MS in loaderMotion.ts. A stylesheet cannot
+     import from the app graph — the same constraint the Hero's keyframes are
+     written under. If you change one, change the other.
+
+     `!important` is not defensive styling. The reduced-motion block at the foot
+     of this file zeroes every animation delay on the page with `!important` on
+     the universal selector, which would fire this net on the first frame rather
+     than at three seconds — dismissing the loader instantly for exactly the
+     readers who did not ask for anything to be instant. A class selector with
+     `!important` outranks it, and the reduced-motion rule below then keeps the
+     ceiling while collapsing the fade. */
+  @keyframes loader-safety-exit {
+    to {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+
+  .loader-safety-exit {
+    animation: loader-safety-exit 460ms var(--ease-apple) 3000ms forwards !important;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .loader-safety-exit {
+      animation-delay: 3000ms !important;
+      animation-duration: 1ms !important;
+    }
+  }
+
+  /* ---- The case study's motion is not here anymore ------------------------
+     The viewer used to open and close on a CSS transition, using
+     `@starting-style` and `transition-behavior: allow-discrete` to animate a
+     native <dialog> through its discrete `display` and `overlay` properties.
+
+     It is a Framer Motion shared-layout transition now: the card and the sheet
+     carry one `layoutId` and the first morphs into the second, which is
+     something CSS cannot express at all — there is no way to interpolate one
+     element's box into a different element's box. See
+     features/showcase/case-studies/caseStudyMotion.ts.
+
+     The dialog is still native, and still doing the four jobs it was kept for:
+     the top layer, inertness, Escape, and returning focus to the card. What
+     changed is that Escape is now intercepted so the element stays in the top
+     layer long enough to animate home rather than vanishing on keydown. */
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -81,5 +250,23 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+
+    /*
+      Delays have to be zeroed too, and this is not a nicety.
+
+      A staged entrance holds an element at its 0% frame for the length of its
+      delay (that is what `animation-fill-mode: backwards` is for). Collapsing
+      only the *duration* leaves the delay intact, so a reader who has asked
+      for less motion gets the worst version of the sequence: a blank
+      composition that stays blank for 850ms and then snaps in all at once.
+      Zeroing the delay is what makes the reduced-motion path render the final
+      state at first paint, which is the actual promise.
+
+      `!important` in a stylesheet beats an inline style, so this also
+      overrides the per-element `animationDelay` the Hero sets from
+      heroMotion.ts.
+    */
+    animation-delay: 0ms !important;
+    transition-delay: 0ms !important;
   }
 }

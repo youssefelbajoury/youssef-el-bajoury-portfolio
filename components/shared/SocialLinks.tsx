@@ -41,7 +41,10 @@ export function SocialLinks({ size = "md", className = "" }: SocialLinksProps) {
             aria-label={label}
             whileHover={prefersReducedMotion ? {} : { scale: 1.08 }}
             whileTap={prefersReducedMotion ? {} : { scale: 0.94 }}
-            className={`flex items-center justify-center rounded-full border border-border text-text-secondary transition-colors duration-fast ease-standard hover:border-border-strong hover:bg-hover-surface hover:text-text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${SIZE_CLASSES[size]}`}
+            /* Square-cornered and lit from the top, like every other object on
+               the page. The hairline is the frame's own value rather than the
+               token border, so these sit in the drawing instead of on it. */
+            className={`flex items-center justify-center rounded-sm border border-[rgba(255,255,255,0.12)] text-text-secondary shadow-[inset_0_1px_0_0_rgba(255,255,255,0.055),4px_6px_16px_-12px_rgba(0,0,0,0.5)] transition-colors duration-fast ease-premium hover:border-[rgba(255,255,255,0.26)] hover:text-text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-border-strong ${SIZE_CLASSES[size]}`}
           >
             <Icon className={ICON_SIZE_CLASSES[size]} aria-hidden />
           </motion.a>

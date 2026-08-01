@@ -26,7 +26,10 @@ export function BrowserFrame({
 }: BrowserFrameProps) {
   return (
     <div
-      className={`relative overflow-hidden rounded-lg border border-white/[0.08] bg-[#0b0d0f] shadow-[0_32px_64px_-28px_rgba(0,0,0,0.9)] ${className}`}
+      /* The window is a physical object on the page, so its shadow is thrown
+         down and to the right like every other one — it used to fall straight
+         down, which is the one direction the page's light cannot produce. */
+      className={`relative overflow-hidden rounded-sm border border-white/[0.08] bg-[#0b0d0f] shadow-[10px_32px_64px_-28px_rgba(0,0,0,0.9),inset_0_1px_0_0_rgba(255,255,255,0.08)] ${className}`}
     >
       <div className="flex items-center gap-12 border-b border-white/[0.06] bg-white/[0.03] px-16 py-12">
         <div aria-hidden className="flex shrink-0 gap-8">
@@ -34,7 +37,7 @@ export function BrowserFrame({
           <span className="size-8 rounded-full bg-white/15" />
           <span className="size-8 rounded-full bg-white/15" />
         </div>
-        <span className="truncate rounded-full border border-white/[0.07] bg-black/40 px-12 py-4 font-mono text-tooltip text-text-tertiary">
+        <span className="truncate rounded-sm border border-white/[0.07] bg-black/40 px-12 py-4 font-mono text-tooltip text-text-tertiary">
           {label}
         </span>
       </div>

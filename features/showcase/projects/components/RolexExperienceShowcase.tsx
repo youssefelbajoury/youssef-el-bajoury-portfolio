@@ -3,14 +3,15 @@
 import { motion, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 
+import { buildRevealVariants, REVEAL_VIEWPORT } from "@/components/shared/revealMotion";
+import { TiltCard } from "@/components/shared/TiltCard";
 import { ROLEX_EXPERIENCE } from "@/data/projects/projects";
+import { CaseStudySurface, CaseStudyTrigger } from "@/features/showcase/case-studies";
 
 import { BrowserFrame } from "./BrowserFrame";
 import { LaptopMockup } from "./LaptopMockup";
 import { ProjectActions } from "./ProjectActions";
-import { buildRevealVariants, REVEAL_VIEWPORT } from "./revealMotion";
 import { TechPill } from "./TechPill";
-import { TiltCard } from "./TiltCard";
 
 import type { CSSProperties } from "react";
 
@@ -21,10 +22,17 @@ const FLOATING = ["Editorial Layout", "Design System"] as const;
  * the inverse of Smart Health Room rather than the same card retinted.
  *
  * Where the health platform leads with its render, this leads with words: the
- * identity panel takes the left, the screenshot follows. Type does the work —
- * a serif display face and very wide-tracked uppercase eyebrows against the
- * site's sans — and the capability list is set as hairline-ruled text with no
- * icons, because boxed icon grids are the opposite of retail restraint.
+ * identity panel takes the left, the screenshot follows, and the capability
+ * list is set as hairline-ruled text with no icons, because boxed icon grids
+ * are the opposite of retail restraint.
+ *
+ * IT NO LONGER SETS ITS OWN TYPE. The tile used to carry a serif display face
+ * and 0.42em eyebrows, which made it the only place on the site with a third
+ * typeface. The page has two voices and no more — SANS IS THE PERSON, MONO IS
+ * THE MACHINE — and a project that opts out of that is a second design system
+ * wearing the first one's layout. The restraint the brief is about now comes
+ * from the composition and from the gold, which survives as ink: the eyebrow,
+ * the capability ticks, the context chip. Not one of them emits.
  */
 export function RolexExperienceShowcase() {
   const prefersReducedMotion = useReducedMotion();
@@ -52,14 +60,14 @@ export function RolexExperienceShowcase() {
         <TiltCard className="h-full" maxTilt={3.5}>
           <div className="flex h-full flex-col p-24 md:p-32">
             <div className="flex items-start justify-between gap-16">
-              <p className="font-serif text-[0.7rem] uppercase tracking-[0.42em] text-[var(--project-accent-bright)]">
+              <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--project-accent-bright)]">
                 {project.discipline}
               </p>
               <div className="flex shrink-0 flex-wrap justify-end gap-8">
-                <span className="rounded-full border border-[rgb(var(--project-accent-rgb)/35%)] bg-[rgb(var(--project-accent-rgb)/10%)] px-12 py-4 font-mono text-badge tracking-wide text-[var(--project-accent-bright)]">
+                <span className="rounded-sm border border-[rgb(var(--project-accent-rgb)/28%)] bg-[rgba(255,255,255,0.018)] px-12 py-4 font-mono text-badge tracking-wide text-[var(--project-accent-bright)] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)]">
                   {project.context}
                 </span>
-                <span className="rounded-full border border-border px-12 py-4 font-mono text-badge tracking-wide text-text-tertiary">
+                <span className="rounded-sm border border-[rgba(255,255,255,0.09)] px-12 py-4 font-mono text-badge tracking-wide text-text-tertiary shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)]">
                   {project.year}
                 </span>
               </div>
@@ -67,7 +75,7 @@ export function RolexExperienceShowcase() {
 
             <h3
               id="project-rolex-experience"
-              className="mt-32 font-serif text-h2 font-normal tracking-[-0.01em] text-text-primary"
+              className="mt-32 text-h2 font-medium tracking-tight text-text-primary"
             >
               {project.title}
             </h3>
@@ -87,15 +95,13 @@ export function RolexExperienceShowcase() {
               {project.features.map((feature) => (
                 <li
                   key={feature.label}
-                  className="flex items-baseline gap-12 border-t border-white/[0.06] py-12"
+                  className="flex items-baseline gap-12 border-t border-[rgba(255,255,255,0.06)] py-12"
                 >
                   <span
                     aria-hidden
-                    className="size-4 shrink-0 translate-y-[-2px] rounded-full bg-[var(--project-accent)]"
+                    className="h-px w-8 shrink-0 translate-y-[-4px] bg-[rgb(var(--project-accent-rgb)/70%)]"
                   />
-                  <span className="font-serif text-paragraph-sm text-text-secondary">
-                    {feature.label}
-                  </span>
+                  <span className="text-paragraph-sm text-text-secondary">{feature.label}</span>
                 </li>
               ))}
             </ul>
@@ -110,42 +116,46 @@ export function RolexExperienceShowcase() {
         </TiltCard>
       </motion.div>
 
-      {/* Collection landing */}
+      {/* Collection landing — and the surface the case study is lifted out of. */}
       <motion.div variants={item} className="lg:col-span-7">
-        <TiltCard className="h-full">
-          <div className="relative flex h-full flex-col justify-center p-24 md:p-32">
-            <LaptopMockup
-              shot={project.shots.hero}
-              reflection
-              sizes="(min-width: 1024px) 55vw, 92vw"
-            />
+        <CaseStudySurface slug={project.slug} className="h-full">
+          <TiltCard className="h-full">
+            <div className="relative flex h-full flex-col justify-center p-24 md:p-32">
+              <LaptopMockup
+                shot={project.shots.hero}
+                reflection
+                sizes="(min-width: 1024px) 55vw, 92vw"
+              />
 
-            {FLOATING.map((tech, index) => (
-              <span
-                key={tech}
-                className={`pointer-events-none absolute ${
-                  index === 0
-                    ? "left-20 top-24 animate-float-soft"
-                    : "bottom-40 right-20 animate-float-soft-late"
-                }`}
-              >
-                <TechPill tone="signal">{tech}</TechPill>
-              </span>
-            ))}
-          </div>
-        </TiltCard>
+              {FLOATING.map((tech, index) => (
+                <span
+                  key={tech}
+                  className={`pointer-events-none absolute ${
+                    index === 0
+                      ? "left-20 top-24 animate-float-soft"
+                      : "bottom-40 right-20 animate-float-soft-late"
+                  }`}
+                >
+                  <TechPill tone="signal">{tech}</TechPill>
+                </span>
+              ))}
+            </div>
+          </TiltCard>
+
+          <CaseStudyTrigger slug={project.slug} title={project.title} />
+        </CaseStudySurface>
       </motion.div>
 
       {/* Product plate — a single watch, spotlit, as a retail display would */}
       <motion.div variants={item} className="lg:col-span-4">
         <TiltCard className="h-full" maxTilt={4}>
           <div className="flex h-full flex-col p-24 md:p-32">
-            <p className="font-serif text-[0.7rem] uppercase tracking-[0.42em] text-text-tertiary">
+            <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-text-tertiary">
               Product Page
             </p>
 
             {project.shots.tertiary ? (
-              <div className="relative mt-24 flex-1 overflow-hidden rounded-lg border border-[rgb(var(--project-accent-rgb)/18%)]">
+              <div className="relative mt-24 flex-1 overflow-hidden rounded-sm border border-[rgba(255,255,255,0.09)]">
                 <div className="relative aspect-[4/5]">
                   <Image
                     src={project.shots.tertiary.src}
@@ -157,12 +167,17 @@ export function RolexExperienceShowcase() {
                        dial roughly 2x. */
                     sizes="(min-width: 1024px) 56vw, 92vw"
                     placeholder="blur"
-                    className="object-cover object-[54%_55%] transition-transform duration-[1100ms] ease-premium group-hover:scale-[1.05]"
+                    /* Centred, like every image on the site that is not a
+                       full-page website capture. The old 54% / 55% was a
+                       hand-nudged crop of the dial, and a hand-nudged crop is a
+                       value nobody can re-derive when the screenshot is
+                       replaced — it survives exactly as long as this one file. */
+                    className="object-cover object-center transition-transform duration-[1100ms] ease-premium group-hover:scale-[1.05]"
                   />
                   {/* Spotlight — a soft warm pool over the dial */}
                   <div
                     aria-hidden
-                    className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_54%_48%,rgb(var(--project-accent-rgb)/14%),transparent_58%)]"
+                    className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_30%_16%,rgba(255,255,255,0.10),transparent_62%)]"
                   />
                   <div
                     aria-hidden
@@ -188,7 +203,7 @@ export function RolexExperienceShowcase() {
         <TiltCard className="h-full" maxTilt={2.5} magnetism={4}>
           <div className="flex h-full flex-col p-24 md:p-32">
             <div className="mb-24">
-              <p className="font-serif text-[0.7rem] uppercase tracking-[0.42em] text-text-tertiary">
+              <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-text-tertiary">
                 Model Index
               </p>
               <p className="mt-8 max-w-readable text-paragraph-sm text-text-secondary">

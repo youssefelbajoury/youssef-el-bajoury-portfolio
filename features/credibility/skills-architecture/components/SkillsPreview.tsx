@@ -3,14 +3,16 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { Database, GitBranch, LayoutGrid, Router, Server, Smartphone } from "lucide-react";
 
-import { SectionKicker } from "@/components/shared/SectionKicker";
+import { buildRevealVariants, REVEAL_VIEWPORT } from "@/components/shared/revealMotion";
+import { SectionHeading } from "@/components/shared/SectionHeading";
+import { SectionShell } from "@/components/shared/SectionShell";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { SKILLS } from "@/data/skills/skills";
+import { RULE_COLOR } from "@/styles/material";
 import type { SkillCategory } from "@/types/skill";
 
-import type { Variants } from "framer-motion";
 import type { LucideIcon } from "lucide-react";
 
 const CATEGORY_ORDER: SkillCategory[] = [
@@ -36,70 +38,70 @@ const SKILLS_BY_CATEGORY = CATEGORY_ORDER.map((category) => ({
   skills: SKILLS.filter((skill) => skill.category === category),
 }));
 
+/**
+ * Technical skills, set as a six-panel index.
+ *
+ * Each panel is numbered and ruled like a sheet in a drawing set — the number
+ * is the reason six near-identical boxes read as one index rather than as six
+ * repetitions of a card component. Icons carry the frame's own hairline stroke
+ * and the frame's own value; they used to be set in the accent, which put six
+ * saturated marks in a section that is otherwise entirely white and grey.
+ */
 export function SkillsPreview() {
   const prefersReducedMotion = useReducedMotion();
-
-  const containerVariants: Variants = {
-    hidden: {},
-    visible: {
-      transition: { staggerChildren: prefersReducedMotion ? 0 : 0.13 },
-    },
-  };
-
-  const itemVariants: Variants = {
-    hidden: { opacity: prefersReducedMotion ? 1 : 0, y: prefersReducedMotion ? 0 : 18 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: prefersReducedMotion ? 0 : 0.8, ease: [0.16, 1, 0.3, 1] },
-    },
-  };
+  const { container, item } = buildRevealVariants(prefersReducedMotion);
 
   return (
-    <section className="relative overflow-hidden border-t border-border">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_80%_0%,rgb(46_230_255_/_8%),transparent_60%)]"
-      />
-
+    <SectionShell id="experience" labelledBy="experience-title">
       <motion.div
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, margin: "-80px" }}
-        variants={containerVariants}
-        className="relative mx-auto max-w-content px-24 py-96 md:px-32"
+        viewport={REVEAL_VIEWPORT}
+        variants={container}
       >
-        <motion.div variants={itemVariants}>
-          <SectionKicker>Technical Skills</SectionKicker>
+        <motion.div variants={item}>
+          <SectionHeading
+            index="03"
+            kicker="Technical Skills"
+            titleId="experience-title"
+            title="Every layer of the stack."
+            statement={
+              <>
+                From interactive frontends to embedded hardware, I work across the full stack
+                &mdash; choosing the right tool for the system, not just the trend.
+              </>
+            }
+          />
         </motion.div>
 
-        <motion.h2
-          variants={itemVariants}
-          className="mt-24 max-w-readable text-title font-semibold text-text-primary"
-        >
-          Every Layer of the Stack
-        </motion.h2>
-
-        <motion.p
-          variants={itemVariants}
-          className="mt-16 max-w-readable text-paragraph-lg text-text-secondary"
-        >
-          From interactive frontends to embedded hardware, I work across the full stack &mdash;
-          choosing the right tool for the system, not just the trend.
-        </motion.p>
-
         <motion.div
-          variants={itemVariants}
+          variants={item}
           className="mt-64 grid grid-cols-1 gap-16 sm:grid-cols-2 lg:grid-cols-3"
         >
-          {SKILLS_BY_CATEGORY.map(({ category, skills }) => {
+          {SKILLS_BY_CATEGORY.map(({ category, skills }, index) => {
             const Icon = CATEGORY_ICONS[category];
             return (
               <Card key={category} className="p-24">
                 <div className="flex items-center gap-12">
-                  <Icon className="size-20 shrink-0 text-accent" aria-hidden />
-                  <h3 className="text-h6 font-semibold text-text-primary">{category}</h3>
+                  <Icon
+                    className="size-20 shrink-0 text-text-tertiary"
+                    strokeWidth={1.25}
+                    aria-hidden
+                  />
+                  <h3 className="text-h6 font-medium tracking-tight text-text-primary">
+                    {category}
+                  </h3>
+                  {/* The sheet number, flush right. Two digits, tabular, and
+                      the one field on the panel set as a machine would set it. */}
+                  <span
+                    aria-hidden
+                    className="ml-auto font-mono text-[11px] tabular-nums tracking-[0.1em] text-text-tertiary"
+                  >
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
                 </div>
+
+                <div aria-hidden className="mt-16 h-px" style={{ backgroundColor: RULE_COLOR }} />
 
                 <ul className="mt-16 flex flex-wrap gap-8">
                   {skills.map((skill) => (
@@ -113,13 +115,15 @@ export function SkillsPreview() {
           })}
         </motion.div>
 
-        <motion.div variants={itemVariants} className="mt-48">
+        <motion.div variants={item} className="mt-48">
           <Button variant="secondary" size="sm" disabled>
             View Full Tech Stack
           </Button>
-          <p className="mt-12 text-caption text-text-tertiary">Full tech stack page coming soon.</p>
+          <p className="mt-12 font-mono text-[11px] tracking-[0.14em] text-text-tertiary">
+            Full tech stack page coming soon.
+          </p>
         </motion.div>
       </motion.div>
-    </section>
+    </SectionShell>
   );
 }

@@ -3,15 +3,16 @@
 import { motion, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 
+import { buildRevealVariants, REVEAL_VIEWPORT } from "@/components/shared/revealMotion";
+import { TiltCard } from "@/components/shared/TiltCard";
 import { SMART_HEALTH_ROOM } from "@/data/projects/projects";
+import { CaseStudySurface, CaseStudyTrigger } from "@/features/showcase/case-studies";
 
 import { BrowserFrame } from "./BrowserFrame";
 import { FeatureGrid } from "./FeatureGrid";
 import { LaptopMockup } from "./LaptopMockup";
 import { ProjectActions } from "./ProjectActions";
-import { buildRevealVariants, REVEAL_VIEWPORT } from "./revealMotion";
 import { TechPill } from "./TechPill";
-import { TiltCard } from "./TiltCard";
 
 import type { CSSProperties } from "react";
 
@@ -52,31 +53,41 @@ export function SmartHealthRoomShowcase() {
       className="grid grid-cols-1 gap-16 lg:grid-cols-12"
       aria-labelledby="project-smart-health-room"
     >
-      {/* Hero — the ecosystem render, presented as a machine */}
+      {/* Hero — the ecosystem render, presented as a machine, and the surface
+          the case study is lifted out of. The trigger is laid over the tile
+          rather than wrapped around it: <a> takes phrasing content and this is
+          a figure holding pills and an image. */}
       <motion.div variants={item} className="lg:col-span-7 lg:row-span-2">
-        <TiltCard className="h-full">
-          <div className="relative flex h-full flex-col justify-center p-24 md:p-32">
-            <LaptopMockup
-              shot={project.shots.hero}
-              priority
-              reflection
-              sizes="(min-width: 1024px) 55vw, 92vw"
-            />
+        <CaseStudySurface slug={project.slug} className="h-full">
+          <TiltCard className="h-full">
+            <div className="relative flex h-full flex-col justify-center p-24 md:p-32">
+              {/* No `priority`: the page's only priority image is the Hero
+                  portrait, which is its LCP candidate. This tile is a full
+                  viewport below the fold, so preloading it competes with the
+                  one image the reader is actually looking at. */}
+              <LaptopMockup
+                shot={project.shots.hero}
+                reflection
+                sizes="(min-width: 1024px) 55vw, 92vw"
+              />
 
-            {FLOATING.map((tech, index) => (
-              <span
-                key={tech}
-                className={`pointer-events-none absolute ${
-                  index === 0
-                    ? "right-20 top-24 animate-float-soft"
-                    : "bottom-40 left-20 animate-float-soft-late"
-                }`}
-              >
-                <TechPill tone="signal">{tech}</TechPill>
-              </span>
-            ))}
-          </div>
-        </TiltCard>
+              {FLOATING.map((tech, index) => (
+                <span
+                  key={tech}
+                  className={`pointer-events-none absolute ${
+                    index === 0
+                      ? "right-20 top-24 animate-float-soft"
+                      : "bottom-40 left-20 animate-float-soft-late"
+                  }`}
+                >
+                  <TechPill tone="signal">{tech}</TechPill>
+                </span>
+              ))}
+            </div>
+          </TiltCard>
+
+          <CaseStudyTrigger slug={project.slug} title={project.title} />
+        </CaseStudySurface>
       </motion.div>
 
       {/* Identity */}
@@ -101,22 +112,26 @@ export function SmartHealthRoomShowcase() {
                     alt={project.logo.alt}
                     width={76}
                     height={44}
-                    className="h-[44px] w-[76px] object-cover"
+                    /* Intrinsic dimensions rather than `fill`, so the box is
+                       reserved before the bytes arrive and the row cannot
+                       reflow around it. */
+                    placeholder="blur"
+                    className="h-[44px] w-[76px] object-cover object-center"
                   />
                 </div>
               ) : null}
 
               <div className="flex shrink-0 flex-wrap justify-end gap-8">
-                <span className="rounded-full border border-[rgb(var(--project-accent-rgb)/35%)] bg-[rgb(var(--project-accent-rgb)/10%)] px-12 py-4 font-mono text-badge tracking-wide text-[var(--project-accent-bright)]">
+                <span className="rounded-sm border border-[rgb(var(--project-accent-rgb)/28%)] bg-[rgba(255,255,255,0.018)] px-12 py-4 font-mono text-badge tracking-wide text-[var(--project-accent-bright)] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)]">
                   {project.context}
                 </span>
-                <span className="rounded-full border border-border px-12 py-4 font-mono text-badge tracking-wide text-text-tertiary">
+                <span className="rounded-sm border border-[rgba(255,255,255,0.09)] px-12 py-4 font-mono text-badge tracking-wide text-text-tertiary shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)]">
                   {project.year}
                 </span>
               </div>
             </div>
 
-            <p className="mt-24 font-mono text-label uppercase tracking-[0.2em] text-[var(--project-accent)]">
+            <p className="mt-24 font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--project-accent)]">
               {project.discipline}
             </p>
 
@@ -151,7 +166,7 @@ export function SmartHealthRoomShowcase() {
       <motion.div variants={item} className="lg:col-span-5">
         <TiltCard className="h-full" maxTilt={3} glow={false}>
           <div className="flex h-full flex-col p-24 md:p-32">
-            <p className="font-mono text-label uppercase tracking-[0.2em] text-text-tertiary">
+            <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-text-tertiary">
               Capabilities
             </p>
             <FeatureGrid features={project.features} className="mt-16" />
@@ -165,7 +180,7 @@ export function SmartHealthRoomShowcase() {
           <div className="p-24 md:p-32">
             <div className="mb-24 flex flex-wrap items-end justify-between gap-16">
               <div>
-                <p className="font-mono text-label uppercase tracking-[0.2em] text-text-tertiary">
+                <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-text-tertiary">
                   End to end
                 </p>
                 <p className="mt-8 max-w-readable text-paragraph-sm text-text-secondary">

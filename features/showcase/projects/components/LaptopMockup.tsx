@@ -4,8 +4,6 @@ import type { ProjectShot } from "@/types/project";
 
 interface LaptopMockupProps {
   shot: ProjectShot;
-  /** Set on the first mockup in the viewport-adjacent tile only. */
-  priority?: boolean;
   /** Adds a mirrored, masked floor reflection beneath the machine. */
   reflection?: boolean;
   className?: string;
@@ -24,19 +22,31 @@ interface LaptopMockupProps {
  * The screen image scales on `group-hover`, which is owned by the enclosing
  * TiltCard — the zoom stays in sync with the tilt instead of firing on its own.
  */
+/*
+  NO `priority` PROP, deliberately. It used to take one, and the only caller
+  that set it was a tile a full viewport below the fold — which is the exact
+  case `priority` is wrong for: it preloads at high priority and competes with
+  the Hero portrait, the one image on the page that is the LCP candidate. Every
+  screenshot here loads lazily with a blur placeholder; the prop is gone rather
+  than defaulted to false so it cannot be switched back on by habit.
+*/
 export function LaptopMockup({
   shot,
-  priority = false,
   reflection = false,
   className = "",
   sizes = "(min-width: 1024px) 55vw, 92vw",
 }: LaptopMockupProps) {
   return (
     <div className={`relative ${className}`}>
-      {/* Ambient accent bloom behind the machine */}
+      {/* The machine's own key light, falling on it from the upper left.
+          What was here before was an accent bloom behind the lid — a coloured
+          lamp mounted behind the object, which is the one thing the page's
+          material system forbids. This is the same lamp that lights every other
+          surface on the page, at the same angle, and it falls *on* the machine
+          rather than radiating from it. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -inset-x-[10%] -top-[14%] bottom-[10%] rounded-full bg-[radial-gradient(ellipse_at_50%_45%,rgb(var(--project-accent-rgb)/18%),transparent_70%)] blur-3xl transition-opacity duration-slow ease-premium group-hover:opacity-90"
+        className="pointer-events-none absolute -inset-x-[10%] -top-[14%] bottom-[10%] bg-[radial-gradient(60%_58%_at_22%_8%,rgba(255,255,255,0.055),transparent_72%)] blur-2xl"
       />
 
       {/* Lid */}
@@ -52,7 +62,6 @@ export function LaptopMockup({
               src={shot.src}
               alt={shot.alt}
               fill
-              priority={priority}
               sizes={sizes}
               placeholder="blur"
               className="object-cover object-top transition-transform duration-[1100ms] ease-premium group-hover:scale-[1.045]"
@@ -88,6 +97,12 @@ export function LaptopMockup({
           aria-hidden
           className="relative mt-[0.35rem] aspect-[16/3] overflow-hidden opacity-[0.18] [mask-image:linear-gradient(to_bottom,black,transparent_72%)]"
         >
+          {/* Same `src` and the same `sizes` as the screen above, which is what
+              makes the reflection free: Next resolves both to one optimized URL
+              at one width, so the mirrored copy is a second <img> pointed at an
+              image the browser has already downloaded. Narrowing `sizes` here
+              would look like an optimisation and would actually add a second
+              fetch at a second width. */}
           <Image
             src={shot.src}
             alt=""
