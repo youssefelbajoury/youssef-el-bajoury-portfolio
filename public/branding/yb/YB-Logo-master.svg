@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+<defs>
+  <linearGradient id="metal" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#F5FAFF"/>
+    <stop offset="0.32" stop-color="#A9C8D8"/>
+    <stop offset="0.62" stop-color="#28495D"/>
+    <stop offset="1" stop-color="#0D1B29"/>
+  </linearGradient>
+  <linearGradient id="cyan" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#8AF7FF"/>
+    <stop offset="0.36" stop-color="#22D3EE"/>
+    <stop offset="0.72" stop-color="#087BD8"/>
+    <stop offset="1" stop-color="#164AA8"/>
+  </linearGradient>
+  <linearGradient id="edge" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#FFFFFF" stop-opacity=".9"/>
+    <stop offset="1" stop-color="#22D3EE" stop-opacity=".8"/>
+  </linearGradient>
+  <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+    <feGaussianBlur stdDeviation="17" result="blur"/>
+    <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.03  0 0 0 0 0.70  0 0 0 0 0.95  0 0 0 .45 0" result="colored"/>
+    <feMerge><feMergeNode in="colored"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+</defs>
+<!-- Subtle circuit rails -->
+<g fill="none" stroke="#22D3EE" stroke-width="9" stroke-linecap="round" opacity=".55">
+  <path d="M160 280 H228 V330"/><path d="M790 270 H850 V330"/>
+  <path d="M172 735 H245 V690"/><path d="M790 740 H855 V690"/>
+</g>
+<g fill="#8AF7FF" opacity=".9"><circle cx="160" cy="280" r="11"/><circle cx="850" cy="330" r="11"/><circle cx="172" cy="735" r="11"/><circle cx="855" cy="690" r="11"/></g>
+<!-- Y shadow/edge -->
+<path d="M206 232 L365 391 L524 232" fill="none" stroke="#061321" stroke-width="116" stroke-linecap="square" stroke-linejoin="bevel"/>
+<path d="M365 391 V790" fill="none" stroke="#061321" stroke-width="116" stroke-linecap="square"/>
+<!-- Y main -->
+<g filter="url(#glow)">
+ <path d="M206 218 L365 377 L524 218" fill="none" stroke="url(#cyan)" stroke-width="83" stroke-linecap="square" stroke-linejoin="bevel"/>
+ <path d="M365 377 V775" fill="none" stroke="url(#cyan)" stroke-width="83" stroke-linecap="square"/>
+</g>
+<!-- B dark extrusion -->
+<path d="M500 218 V775 M500 218 H667 C826 218 826 410 667 410 H500 M500 410 H694 C858 410 858 775 694 775 H500"
+      fill="none" stroke="#061321" stroke-width="116" stroke-linecap="square" stroke-linejoin="round"/>
+<!-- B body -->
+<g filter="url(#glow)">
+ <path d="M500 218 V775" fill="none" stroke="url(#metal)" stroke-width="82" stroke-linecap="square"/>
+ <path d="M500 218 H667 C826 218 826 410 667 410 H500" fill="none" stroke="url(#metal)" stroke-width="82" stroke-linecap="square" stroke-linejoin="round"/>
+ <path d="M500 410 H694 C858 410 858 775 694 775 H500" fill="none" stroke="url(#cyan)" stroke-width="82" stroke-linecap="square" stroke-linejoin="round"/>
+</g>
+<!-- Fine circuit traces and data nodes inside the B counters -->
+<g fill="none" stroke="#23DDF3" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+ <path d="M600 317 H686 L718 286 H755"/>
+ <path d="M594 552 H660 L696 588 H752"/>
+ <path d="M596 674 H672 L702 644 H756"/>
+</g>
+<g fill="#A5F8FF" stroke="#087BC4" stroke-width="7">
+ <circle cx="755" cy="286" r="14"/><circle cx="752" cy="552" r="14"/><circle cx="756" cy="644" r="14"/>
+</g>
+<!-- Small data-network cluster -->
+<g stroke="#159EDC" stroke-width="7" opacity=".95">
+ <path d="M626 470 L676 445 L727 470 L676 511 Z" fill="none"/>
+ <path d="M626 470 L727 470 M676 445 V511" fill="none"/>
+</g>
+<g fill="#8AF7FF"><circle cx="626" cy="470" r="11"/><circle cx="676" cy="445" r="11"/><circle cx="727" cy="470" r="11"/><circle cx="676" cy="511" r="11"/><circle cx="676" cy="470" r="12"/></g>
+<!-- Subtle top-edge glints -->
+<path d="M208 218 L365 377 L524 218" fill="none" stroke="url(#edge)" stroke-width="7" opacity=".75"/>
+</svg>

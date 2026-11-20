@@ -31,7 +31,7 @@ export function Footer() {
                   {PROFILE.name}
                 </p>
                 <p className="mt-8 font-mono text-[11px] uppercase tracking-[0.2em] text-text-secondary">
-                  Full Stack &middot; Cloud &middot; AI &middot; IoT Engineer
+                  {PROFILE.position}
                 </p>
               </div>
               <SocialLinks />

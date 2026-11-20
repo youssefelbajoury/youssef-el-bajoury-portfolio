@@ -1,3 +1,13 @@
+import autoflowFleetConceptual from "@/public/projects/autoflow/01-fleet-management-conceptual-ui.png";
+import autoflowFullStackConceptual from "@/public/projects/autoflow/02-full-stack-dashboard-conceptual-ui.png";
+import autoflowAiConceptual from "@/public/projects/autoflow/03-ai-dashboard-conceptual-ui.png";
+import autoflowDeveloperConceptual from "@/public/projects/autoflow/04-developer-portfolio-conceptual-ui.png";
+import autoflowDeveloperDashboardConceptual from "@/public/projects/autoflow/05-developer-dashboard-conceptual-ui.png";
+import moroccoRetailSales from "@/public/projects/morocco-retail-intelligence/01-sales-performance.png";
+import moroccoRetailExecutive from "@/public/projects/morocco-retail-intelligence/02-executive-overview.png";
+import moroccoRetailInventory from "@/public/projects/morocco-retail-intelligence/03-inventory-health.png";
+import moroccoRetailProcurement from "@/public/projects/morocco-retail-intelligence/04-procurement.png";
+import moroccoRetailPlatform from "@/public/projects/morocco-retail-intelligence/05-platform-health.png";
 import allModelsShot from "@/public/projects/rolex-experience/all-models.png";
 import collectionHomeShot from "@/public/projects/rolex-experience/collection-home.png";
 import rolexGalleryAllModels from "@/public/projects/rolex-experience/gallery/all-models.png";
@@ -21,44 +31,123 @@ import shrGalleryUserDashboard from "@/public/projects/smart-health-room/gallery
 import logoShot from "@/public/projects/smart-health-room/logo.png";
 import roomOverviewShot from "@/public/projects/smart-health-room/room-overview.png";
 import systemArchitectureShot from "@/public/projects/smart-health-room/system-architecture.png";
-import type { ShowcaseProject } from "@/types/project";
+import type { ScreenshotProject, ShowcaseProject, SystemShowcaseProject } from "@/types/project";
 
-import { ROLEX_EXPERIENCE_CASE_STUDY, SMART_HEALTH_ROOM_CASE_STUDY } from "./case-studies";
+import {
+  AUTOFLOW_CASE_STUDY,
+  MOROCCO_RETAIL_CASE_STUDY,
+  ROLEX_EXPERIENCE_CASE_STUDY,
+  SMART_HEALTH_ROOM_CASE_STUDY,
+} from "./case-studies";
 
 /*
   ─────────────────────────────────────────────────────────────────────────────
-  TODO(youssef) — CONFIRM BEFORE THIS SHIPS PUBLICLY
+  PROJECT SOURCE DATA
   ─────────────────────────────────────────────────────────────────────────────
-  Two fields below are the author's to verify, and were deliberately written
-  conservatively rather than guessed at (MASTER_SPECIFICATION.md, "Writing
-  Guidelines": no fake metrics, no unverifiable statements):
+  Structural only: ids, slugs, screenshots, accents, metrics, and the written
+  half imported from ./case-studies.ts.
 
-  1. `technologies` — these are capability- and discipline-level pills derived
-     only from what is visibly evidenced in the project's own screenshots.
-     Framework names (React / Next.js / Node / MongoDB / Flutter / …) were NOT
-     invented. Replace these arrays with the real stack once confirmed.
+  PROVENANCE. Every technology, capability and metric below is taken from the
+  project it describes — the Smart Health Room stack, the AutoFlow schema and
+  test run, and the Morocco Retail platform's own documentation. Nothing is
+  inferred from a screenshot alone.
 
-  2. `year` — inferred ordering only (Smart Health Room is the newer build).
-     Correct the values if they are wrong.
+  LINKS. `repoUrl` is set only where a verified public repository exists —
+  Morocco Retail, Smart Health Room and Rolex. AutoFlow has no supplied
+  repository, so its action renders disabled and clearly labelled rather than
+  pointing at nothing. `liveUrl` is absent throughout: none of these is deployed
+  at a public address.
 
-  3. `repoUrl` / `liveUrl` — intentionally absent. Both actions render disabled
-     and clearly labelled until real URLs are added here.
-
-  4. `caseStudy` — the written sections (architecture, challenges, solutions,
-     lessons) live in ./case-studies.ts and ship empty for the same reason.
-     That file is prose only; the viewer renders each section the moment it has
-     an entry.
+  STILL ABSENT, ON PURPOSE:
+  Challenges, solutions and lessons — they live in ./case-studies.ts and ship
+  empty where no verified narrative exists.
   ─────────────────────────────────────────────────────────────────────────────
 */
 
-const SMART_HEALTH_ROOM: ShowcaseProject = {
+const AUTOFLOW: SystemShowcaseProject = {
+  id: "autoflow",
+  slug: "autoflow",
+  title: "AutoFlow",
+  discipline: "Full Stack Platform",
+  description:
+    "A TypeScript monorepo built as a production-shaped platform: four packages over one PostgreSQL schema, an OpenAPI contract, Redis, and a Dockerised runtime. The engineering is the argument — 32 tables, 70 foreign keys, and 461 unit tests holding the whole thing together.",
+  year: "2026",
+  context: "Conceptual / In development",
+  accent: {
+    base: "#34d399",
+    bright: "#6ee7b7",
+    rgb: "52 211 153",
+  },
+  features: [
+    { label: "PostgreSQL Schema", icon: "database" },
+    { label: "Prisma ORM", icon: "data" },
+    { label: "OpenAPI Contract", icon: "api" },
+    { label: "Express API", icon: "backend" },
+    { label: "Redis", icon: "storage" },
+    { label: "Automated Tests", icon: "testing" },
+    { label: "Docker", icon: "container" },
+    { label: "TypeScript Monorepo", icon: "orchestration" },
+  ],
+  technologies: [
+    "Next.js",
+    "React",
+    "TypeScript",
+    "Node.js",
+    "Express.js",
+    "PostgreSQL",
+    "Prisma",
+    "Redis",
+    "Docker",
+    "OpenAPI",
+  ],
+  metrics: [
+    { value: "32", label: "Tables" },
+    { value: "70", label: "Foreign keys" },
+    { value: "49", label: "API paths" },
+    { value: "107", label: "Schemas" },
+    { value: "461", label: "Tests passing" },
+    { value: "4/4", label: "Packages built" },
+  ],
+  metricNote:
+    "Counted from the project's schema and OpenAPI contract. The test figure is the API package's unit run; the integration suite needs a live PostgreSQL and is not included.",
+  gallery: [
+    {
+      src: autoflowFleetConceptual,
+      alt: "Conceptual UI — AutoFlow fleet management dashboard concept, still in development.",
+      caption: "Conceptual UI · In development — Fleet management",
+    },
+    {
+      src: autoflowFullStackConceptual,
+      alt: "Conceptual UI — neon-blue full-stack dashboard concept for AutoFlow, still in development.",
+      caption: "Conceptual UI · In development — Full-stack dashboard",
+    },
+    {
+      src: autoflowAiConceptual,
+      alt: "Conceptual UI — futuristic AI developer dashboard concept for AutoFlow, still in development.",
+      caption: "Conceptual UI · In development — AI dashboard",
+    },
+    {
+      src: autoflowDeveloperConceptual,
+      alt: "Conceptual UI — neon-blue developer portfolio interface concept for AutoFlow, still in development.",
+      caption: "Conceptual UI · In development — Developer interface",
+    },
+    {
+      src: autoflowDeveloperDashboardConceptual,
+      alt: "Conceptual UI — neon-blue developer dashboard concept for AutoFlow, still in development.",
+      caption: "Conceptual UI · In development — Developer dashboard",
+    },
+  ],
+  caseStudy: AUTOFLOW_CASE_STUDY,
+};
+
+const SMART_HEALTH_ROOM: ScreenshotProject = {
   id: "smart-health-room",
   slug: "smart-health-room",
   title: "Smart Health Room",
   discipline: "Connected Healthcare Platform",
   description:
-    "A connected room that reads its own environment and acts on it. Sensors stream temperature, humidity, and air quality from an ESP32 and Arduino control layer into a web platform, a mobile companion, and a real-time dashboard — with an assistant layer that turns raw readings into health and sleep guidance.",
-  year: "2026",
+    "A connected room that reads its own environment and acts on it. ESP32 and Arduino nodes stream temperature, humidity, pressure, presence, light, and gas into a Node.js backend, then out to a Next.js web platform, a Flutter companion, and a real-time dashboard — with an assistant layer that turns raw readings into health and sleep guidance.",
+  year: "2025 – 2026",
   context: "Academic Project",
   accent: {
     base: "#2ee6ff",
@@ -66,23 +155,33 @@ const SMART_HEALTH_ROOM: ShowcaseProject = {
     rgb: "46 230 255",
   },
   features: [
-    { label: "IoT", icon: "iot" },
-    { label: "Artificial Intelligence", icon: "ai" },
+    { label: "Real-time Monitoring", icon: "realtime" },
+    { label: "Temperature & Humidity", icon: "climate" },
+    { label: "Air Pressure", icon: "sensor" },
+    { label: "Presence Detection", icon: "presence" },
+    { label: "Light Control", icon: "light" },
+    { label: "Gas Detection", icon: "gas" },
+    { label: "RFID Access", icon: "access" },
+    { label: "Historical Data", icon: "history" },
+    { label: "Alerts", icon: "alerts" },
+    { label: "AI Assistant", icon: "ai" },
     { label: "Web Platform", icon: "web" },
-    { label: "Mobile Application", icon: "mobile" },
-    { label: "Backend", icon: "backend" },
-    { label: "Real-time Dashboard", icon: "dashboard" },
+    { label: "Mobile App", icon: "mobile" },
   ],
   technologies: [
+    "Next.js",
+    "React",
+    "TypeScript",
+    "Tailwind CSS",
+    "Node.js",
+    "Express.js",
+    "MongoDB",
+    "Flutter",
     "ESP32",
     "Arduino",
-    "Sensor Network",
-    "Real-time Telemetry",
-    "Web Platform",
-    "Mobile App",
-    "AI Assistant",
-    "Analytics Dashboard",
+    "Raspberry Pi",
   ],
+  repoUrl: "https://github.com/youssefelbajoury/SMART-HEALTH-ROOM",
   shots: {
     hero: {
       src: roomOverviewShot,
@@ -147,7 +246,88 @@ const SMART_HEALTH_ROOM: ShowcaseProject = {
   caseStudy: SMART_HEALTH_ROOM_CASE_STUDY,
 };
 
-const ROLEX_EXPERIENCE: ShowcaseProject = {
+const MOROCCO_RETAIL: SystemShowcaseProject = {
+  id: "morocco-retail-intelligence",
+  slug: "morocco-retail-intelligence",
+  title: "Morocco Retail Intelligence",
+  discipline: "Data Engineering Platform",
+  description:
+    "An end-to-end retail data platform: Python ingestion into MinIO, Great Expectations quality gates, PostgreSQL and dbt transformation into a Kimball star schema, Airflow orchestration, and five Superset dashboards. Built as a Master II-BDCC portfolio project on entirely synthetic data.",
+  year: "2026",
+  context: "Data Engineering Project",
+  accent: {
+    base: "#818cf8",
+    bright: "#a5b4fc",
+    rgb: "129 140 248",
+  },
+  features: [
+    { label: "Ingestion Pipeline", icon: "pipeline" },
+    { label: "Data Quality Gates", icon: "quality" },
+    { label: "Star Schema", icon: "data" },
+    { label: "dbt Models", icon: "orchestration" },
+    { label: "Airflow Scheduling", icon: "realtime" },
+    { label: "Superset Dashboards", icon: "bi" },
+    { label: "Object Storage", icon: "storage" },
+    { label: "Observability", icon: "observability" },
+  ],
+  technologies: [
+    "Python 3.12",
+    "PostgreSQL 16",
+    "dbt",
+    "Apache Airflow",
+    "Apache Superset",
+    "MinIO",
+    "Great Expectations",
+    "Docker Compose",
+    "Prometheus",
+    "Grafana",
+  ],
+  repoUrl: "https://github.com/youssefelbajoury/morocco-retail-intelligence-data-platform",
+  metrics: [
+    { value: "7 + 3", label: "Dims + facts" },
+    { value: "5", label: "Dashboards" },
+    { value: "42", label: "Charts" },
+    { value: "140", label: "dbt tests" },
+    { value: "504", label: "Tests passed" },
+    { value: "8", label: "CI jobs" },
+  ],
+  metricNote:
+    "Measured on the development machine with synthetic data; CI is configured but not yet validated remotely.",
+  /*
+    The five dashboards, in the order the platform's own documentation presents
+    them. These are captures of the live Superset instance, not mockups.
+  */
+  gallery: [
+    {
+      src: moroccoRetailSales,
+      alt: "Morocco Retail Intelligence sales performance dashboard — nine charts with time-range, region, channel, and category filters.",
+      caption: "Sales performance",
+    },
+    {
+      src: moroccoRetailExecutive,
+      alt: "Morocco Retail Intelligence executive overview dashboard — eight charts with time-range, region, and category filters.",
+      caption: "Executive overview",
+    },
+    {
+      src: moroccoRetailInventory,
+      alt: "Morocco Retail Intelligence inventory health dashboard — eight charts with time-range, region, and stock-status filters.",
+      caption: "Inventory health",
+    },
+    {
+      src: moroccoRetailProcurement,
+      alt: "Morocco Retail Intelligence procurement dashboard — eight charts with time-range, region, and category filters.",
+      caption: "Procurement",
+    },
+    {
+      src: moroccoRetailPlatform,
+      alt: "Morocco Retail Intelligence platform health dashboard — nine charts with time-range and source filters.",
+      caption: "Platform health",
+    },
+  ],
+  caseStudy: MOROCCO_RETAIL_CASE_STUDY,
+};
+
+const ROLEX_EXPERIENCE: ScreenshotProject = {
   id: "rolex-experience",
   slug: "rolex-experience",
   title: "Rolex Experience",
@@ -177,6 +357,7 @@ const ROLEX_EXPERIENCE: ShowcaseProject = {
     "Micro-interactions",
     "Accessibility",
   ],
+  repoUrl: "https://github.com/youssefelbajoury/RolexProject",
   shots: {
     hero: {
       src: collectionHomeShot,
@@ -231,10 +412,16 @@ const ROLEX_EXPERIENCE: ShowcaseProject = {
 };
 
 /**
- * Ordered newest-first. The showcase renders each project through its own
- * bespoke composition, so this array is the source of truth for content and
- * ordering — not for layout.
+ * Ordered deliberately rather than by date: the two systems lead, the two
+ * screen-led projects follow, and Rolex closes the set. The showcase renders
+ * each project through its own composition, so this array is the source of
+ * truth for content and ordering — not for layout.
  */
-export const SHOWCASE_PROJECTS = [SMART_HEALTH_ROOM, ROLEX_EXPERIENCE] as const;
+export const SHOWCASE_PROJECTS: readonly ShowcaseProject[] = [
+  AUTOFLOW,
+  SMART_HEALTH_ROOM,
+  MOROCCO_RETAIL,
+  ROLEX_EXPERIENCE,
+];
 
-export { ROLEX_EXPERIENCE, SMART_HEALTH_ROOM };
+export { AUTOFLOW, MOROCCO_RETAIL, ROLEX_EXPERIENCE, SMART_HEALTH_ROOM };

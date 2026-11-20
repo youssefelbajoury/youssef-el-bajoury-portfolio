@@ -14,44 +14,54 @@ import type { StaticImageData } from "next/image";
  */
 
 /**
- * The headline, one array entry per line.
+ * The headline, visual line by visual line.
  *
- * Held as explicit lines rather than a string with <br />: the break is a
- * typographic decision, not a consequence of the container's width, and it
- * must survive every viewport unchanged.
+ * Each line is an array of segments rather than a plain string: the break is a
+ * typographic decision, and the accent is applied to whole words rather than to
+ * a character range. `HERO_HEADLINE_TEXT` is the one sentence screen readers
+ * receive; the visual lines are hidden from the accessibility tree so the
+ * sentence is never announced twice.
  */
-export const HERO_HEADLINE = ["From the sensor", "to the screen."] as const;
+export interface HeroHeadlineSegment {
+  text: string;
+  /** The site's one cyan signal, used as ink on two words only. */
+  accent?: boolean;
+}
+
+export const HERO_HEADLINE: readonly (readonly HeroHeadlineSegment[])[] = [
+  [{ text: "Engineering" }],
+  [{ text: "intelligent", accent: true }, { text: " systems" }],
+  [{ text: "with " }, { text: "data & AI", accent: true }, { text: "." }],
+] as const;
+
+export const HERO_HEADLINE_TEXT = HERO_HEADLINE.map((line) =>
+  line.map((segment) => segment.text).join("")
+).join(" ");
 
 /**
  * Optical left correction per headline line, in em.
  *
- * A glyph does not begin where its box begins. Every element down the left of
- * this column — the status lamp, the lede rule, the sentence, the primary
- * action, the domain index — has ink flush to the column edge, measured at
- * 112.0px on a 1440 viewport. The headline did not: line 1's "F" started at
- * 120.0 and line 2's "t" at 116.33, because both carry a left side bearing that
- * scales with the type. At 92px that is 8.0px and 4.33px of empty air, so the
- * largest element on the page sat visibly indented from a margin everything
- * else respected — and, worse, its own two lines disagreed with each other by
- * 3.67px, which reads as a ragged edge rather than as a flush-left block.
+ * The old values belonged to an F and a t. These lines open with E, i and w, so
+ * each bearing was measured from Geist Sans 500 at a 1000px canvas size, where
+ * one design unit is far larger than a rendered pixel: 78.125/1000, 62.5/1000
+ * and 15.625/1000. Those ratios are the corrections below. They are not guesses
+ * from the rendered size, where hinting rounds each bearing to whole pixels.
  *
- * The numbers below are those measured bearings divided by the font size, so
- * they are the bearing itself expressed as a ratio: -8.0/92 and -4.33/92. In em
- * they hold at every breakpoint without a media query, because the bearing and
- * the correction scale by the same factor — 3.4px and 1.9px at the mobile 39.5px,
- * 8.0px and 4.33px at the desktop cap.
- *
- * This is per line and not per element, and it has to be: one offset cannot
- * align two different opening glyphs. That couples these values to the words in
- * HERO_HEADLINE above — change the first letter of either line and the number
- * beside it is wrong. Re-measure rather than guess; the letter-spacing does not
- * enter into it, since tracking is applied after each glyph and never before
- * the first.
+ * The correction still rides on the clipping element, and it must stay per
+ * line: one offset cannot align three different side bearings. Checked at 375,
+ * 640, 912 and 1440px, all three lines land flush with the column edge.
  */
-export const HERO_HEADLINE_OPTICAL = ["-0.087em", "-0.047em"] as const;
+export const HERO_HEADLINE_OPTICAL = ["-0.078125em", "-0.0625em", "-0.015625em"] as const;
 
-/** One sentence. It states a position; it does not describe a skill set. */
-export const HERO_STATEMENT = "One engineer. The whole system.";
+/**
+ * The machine-voice positioning line. The first two clauses are read from the
+ * site-wide profile so they cannot drift; the data and AI clause is Hero copy.
+ */
+export const HERO_POSITIONING = `${PROFILE.position} | AI & Data Engineering`;
+
+/** The supporting sentence, in the human voice. */
+export const HERO_STATEMENT =
+  "Building scalable software, intelligent applications and data-driven solutions through modern engineering.";
 
 /** Casablanca, to four decimal places — the machine's voice, so: mono. */
 export const HERO_COORDINATES = {
@@ -59,7 +69,7 @@ export const HERO_COORDINATES = {
   longitude: "7.5898° W",
 } as const;
 
-export const HERO_AVAILABILITY = "Available for full-time";
+export const HERO_AVAILABILITY = "Open to full-time & internships";
 
 /**
  * The specimen plate's label — the museum card beneath the object.
@@ -76,7 +86,7 @@ export const HERO_AVAILABILITY = "Available for full-time";
  */
 export const HERO_PLATE_LABEL = {
   identity: PROFILE.name,
-  role: "Software Engineer",
+  role: "Software Engineer · Full Stack Development",
   location: PROFILE.location,
 } as const;
 

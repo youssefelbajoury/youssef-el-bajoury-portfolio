@@ -37,6 +37,30 @@ const eslintConfig = [
     },
   },
   {
+    files: ["**/*.{ts,tsx}"],
+    ignores: ["app/api/**/route.ts"],
+    rules: {
+      /*
+        lib/env.server.ts holds the only secret-bearing schema in the project.
+        It is allowed in a route handler and nowhere else — not in a client
+        component, not in a shared module, not in a page. The runtime guard in
+        the file is the second line of defence; this is the first.
+      */
+      "no-restricted-imports": [
+        "error",
+        {
+          paths: [
+            {
+              name: "@/lib/env.server",
+              message:
+                "lib/env.server.ts is server-only. Import it from a route handler under app/api.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
     ignores: [".next/**", "node_modules/**", "out/**"],
   },
 ];

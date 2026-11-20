@@ -21,8 +21,8 @@ import type { CSSProperties } from "react";
  */
 const SPEC_ROWS = [
   { label: "Base", value: PROFILE.location },
-  { label: "Reach", value: "Available worldwide" },
-  { label: "Mode", value: "Remote-friendly" },
+  { label: "Open to", value: "CDI & internships" },
+  { label: "Focus", value: "Full stack · AI · Data" },
 ] as const;
 
 /**
@@ -49,7 +49,7 @@ function LocationCallout() {
       </p>
       <div aria-hidden className="my-16 h-px" style={{ backgroundColor: RULE_COLOR }} />
       <p className="font-mono text-[11px] tracking-[0.14em] text-text-secondary">
-        Available worldwide &middot; Remote-friendly
+        Open to CDI &middot; Pre-employment internships
       </p>
     </div>
   );
@@ -87,11 +87,11 @@ export function LocationPanel() {
         <div className="lg:col-span-5">
           <motion.div variants={item}>
             <SectionHeading
-              index="04"
+              index="06"
               kicker="Current Location"
               titleId="location-title"
               title="Based in Morocco."
-              statement="Building production-grade software from Casablanca for companies around the world."
+              statement="Building software from Casablanca — open to full-time roles and pre-employment internships."
             />
           </motion.div>
 

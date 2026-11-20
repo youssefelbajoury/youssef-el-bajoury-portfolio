@@ -269,6 +269,12 @@ export function CaseStudyGallery({ shots, title, reducedMotion }: CaseStudyGalle
         </motion.div>
       </div>
 
+      {shot.caption ? (
+        <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-[var(--project-accent-bright)]">
+          {shot.caption}
+        </p>
+      ) : null}
+
       {multiple ? (
         <div className="flex items-center gap-16">
           {/*

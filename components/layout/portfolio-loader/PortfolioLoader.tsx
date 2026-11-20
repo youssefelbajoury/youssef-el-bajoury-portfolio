@@ -3,15 +3,10 @@
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 
-import { PROFILE } from "@/constants/profile";
 import {
   GRAIN_OPACITY,
   GRAIN_TEXTURE,
   KEY_LIGHT,
-  PLATE_BORDER,
-  PLATE_EDGES,
-  PLATE_FILL,
-  PLATE_GUIDE,
   PLATE_SWEEP,
   RULE_COLOR,
 } from "@/styles/material";
@@ -25,6 +20,7 @@ import {
   PROGRESS,
   SCAN,
 } from "./loaderMotion";
+import YBLoadingLogo from "./YBLoadingLogo";
 
 import type { CSSProperties } from "react";
 
@@ -273,19 +269,6 @@ function LoaderBackdrop() {
 --------------------------------------------------------------------------- */
 
 /**
- * The monogram, derived rather than typed.
- *
- * First initial and last initial, taken from the one place the name is written
- * down. A monogram hard-coded next to a name in a constants file is two sources
- * of truth for the same fact, and the second one is always the one that goes
- * stale.
- */
-const NAME_PARTS = PROFILE.name.split(" ").filter(Boolean);
-const MONOGRAM = [NAME_PARTS.at(0), NAME_PARTS.at(-1)]
-  .map((part) => part?.charAt(0) ?? "")
-  .join("");
-
-/**
  * The engineering rule under the mark.
  *
  * LEDE_RULE's own value, made symmetric. The site's lede rule tapers along its
@@ -342,7 +325,7 @@ function LoaderComposition() {
                 }
           }
         >
-          <Monogram />
+          <YBLoadingLogo size={64} decorative />
         </motion.div>
       </motion.div>
 
@@ -391,39 +374,6 @@ function LoaderComposition() {
         <ProgressRail reduced={reduced} />
       </motion.div>
     </motion.div>
-  );
-}
-
-/**
- * The mark: a specimen plate at 72px.
- *
- * The site's one object — the Hero's plate, the About portrait — reduced to the
- * size of a stamp and lit by the same lamp: a bright top edge, a lit left edge,
- * a dark right edge, a darker bottom edge, two shadows thrown down-and-right,
- * and the print-bleed guide a real plate carries inside its trim. Nothing here
- * is new material; it is PLATE_FILL, PLATE_EDGES, PLATE_BORDER and PLATE_GUIDE
- * at a smaller size, which is why the mark reads as belonging to the page it is
- * about to uncover.
- *
- * Set at weight 500, not 600 — display type wants less weight as it gets larger,
- * and two letters at 22px on a 72px field are display type.
- */
-function Monogram() {
-  return (
-    <div
-      aria-hidden
-      className="relative flex size-[72px] items-center justify-center rounded-sm border"
-      style={{ background: PLATE_FILL, borderColor: PLATE_BORDER, boxShadow: PLATE_EDGES }}
-    >
-      <span className="text-h5 font-medium tracking-tight text-text-primary">{MONOGRAM}</span>
-
-      {/* Bleed guide — the trim boundary inside the plate. */}
-      <span
-        aria-hidden
-        className="pointer-events-none absolute inset-[7px] rounded-[2px] border"
-        style={{ borderColor: PLATE_GUIDE }}
-      />
-    </div>
   );
 }
 

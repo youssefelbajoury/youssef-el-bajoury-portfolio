@@ -19,7 +19,7 @@ import type { ReactNode } from "react";
  */
 
 interface SectionHeadingProps {
-  /** The section's number in the document — "01" through "05". */
+  /** The section's number in the document — "01" through "07". */
   index: string;
   kicker: string;
   title: ReactNode;

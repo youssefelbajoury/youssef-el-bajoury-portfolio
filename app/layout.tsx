@@ -14,9 +14,9 @@ import "@/styles/globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(env.NEXT_PUBLIC_SITE_URL),
-  title: "Youssef El Bajoury — Full Stack Software Engineer",
+  title: "Youssef El Bajoury — Software Engineer | Full Stack Development",
   description:
-    "I build production-grade software that transforms complex business challenges into simple, scalable, and intuitive digital solutions.",
+    "Software engineer working across full stack development, AI and machine learning, big data and cloud, and IoT systems. Based in Casablanca, Morocco.",
 };
 
 interface RootLayoutProps {

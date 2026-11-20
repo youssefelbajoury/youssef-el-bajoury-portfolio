@@ -6,10 +6,12 @@
 
 export const PROFILE = {
   name: "Youssef El Bajoury",
+  /** The position this site claims, stated once and reused everywhere. */
+  position: "Software Engineer | Full Stack Development",
   location: "Casablanca, Morocco",
   availability: {
-    label: "Available for Full-Time Opportunities",
-    supportingText: "Open to new opportunities",
+    label: "Open to CDI & Pre-Employment Internships",
+    supportingText: "Full-time roles and internships · Casablanca, Morocco",
   },
   contactEmail: "youssefelbajoury321@gmail.com",
   /** Display form. The dialable form is derived below — never type it twice. */

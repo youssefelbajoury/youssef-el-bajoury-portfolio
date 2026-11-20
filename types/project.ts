@@ -17,7 +17,27 @@ export type ProjectFeatureIcon =
   | "favourites"
   | "product"
   | "search"
-  | "responsive";
+  | "responsive"
+  | "api"
+  | "data"
+  | "pipeline"
+  | "quality"
+  | "orchestration"
+  | "bi"
+  | "observability"
+  | "storage"
+  | "access"
+  | "alerts"
+  | "realtime"
+  | "database"
+  | "testing"
+  | "container"
+  | "sensor"
+  | "climate"
+  | "presence"
+  | "light"
+  | "gas"
+  | "history";
 
 export interface ProjectFeature {
   label: string;
@@ -41,6 +61,21 @@ export interface ProjectAccent {
 export interface ProjectShot {
   src: StaticImageData;
   alt: string;
+  /** Short visible label for a gallery image, such as a dashboard category or build status. */
+  caption?: string;
+}
+
+/**
+ * One evidenced number about a project, as it should be read: a value and what
+ * the value counts.
+ *
+ * These are structural rather than prose because the showcase renders them as a
+ * ruled instrument panel. Nothing lands here that cannot be counted from the
+ * project itself — a schema, a contract, a test run.
+ */
+export interface ProjectMetric {
+  value: string;
+  label: string;
 }
 
 /**
@@ -82,7 +117,15 @@ export interface ProjectCaseStudy {
   lessons: string[];
 }
 
-export interface ShowcaseProject {
+/**
+ * Everything a project has regardless of how its tile is drawn.
+ *
+ * Split from the two variants below because the showcase has two honest shapes:
+ * a project with screenshots, and a system whose evidence is a schema, a
+ * contract and a test run rather than a picture. Neither is a lesser project, so
+ * the shared half carries no hint of which one it is.
+ */
+interface ShowcaseProjectBase {
   id: string;
   /** Drives the case-study route: /projects/<slug>. */
   slug: string;
@@ -101,11 +144,6 @@ export interface ShowcaseProject {
    * that have not been confirmed. See the TODO in data/projects/projects.ts.
    */
   technologies: string[];
-  shots: {
-    hero: ProjectShot;
-    secondary: ProjectShot;
-    tertiary?: ProjectShot;
-  };
   /**
    * The case-study viewer's image set, in reading order.
    *
@@ -122,6 +160,13 @@ export interface ShowcaseProject {
   gallery: ProjectShot[];
   logo?: ProjectShot;
   /**
+   * Counted evidence rendered by the system tile and the case study. Optional
+   * because a screenshot-led project may have no such numbers to publish.
+   */
+  metrics?: ProjectMetric[];
+  /** One line stating where the metrics came from, so they are not free-floating. */
+  metricNote?: string;
+  /**
    * Absent until a real public repository exists. The GitHub action renders in
    * a disabled, honestly-labelled state while this is undefined — never a dead
    * link.
@@ -137,3 +182,28 @@ export interface ShowcaseProject {
    */
   caseStudy: ProjectCaseStudy;
 }
+
+/**
+ * A project the showcase can present as a machine: a laptop render, a browser
+ * strip, a product plate. The bespoke tiles narrow to this so their access to
+ * `shots` is checked by the compiler rather than asserted.
+ */
+export interface ScreenshotProject extends ShowcaseProjectBase {
+  shots: {
+    hero: ProjectShot;
+    secondary: ProjectShot;
+    tertiary?: ProjectShot;
+  };
+}
+
+/**
+ * A project with no screenshots to show, presented through its measured shape
+ * instead. `shots` is explicitly `undefined` so it cannot be half-populated and
+ * silently rendered as a broken mockup.
+ */
+export interface SystemShowcaseProject extends ShowcaseProjectBase {
+  shots?: undefined;
+  metrics: ProjectMetric[];
+}
+
+export type ShowcaseProject = ScreenshotProject | SystemShowcaseProject;

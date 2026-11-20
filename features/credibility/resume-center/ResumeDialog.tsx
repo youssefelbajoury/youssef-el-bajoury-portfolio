@@ -222,7 +222,7 @@ export function ResumeDialog({ onClose }: ResumeDialogProps) {
                       variants={motionSpec.listItem}
                       className="mt-8 max-w-readable text-paragraph-sm text-text-secondary"
                     >
-                      The same document in two languages. Open it in a new tab, or keep a copy.
+                      Two résumés. Open one in a new tab, or keep a copy.
                     </motion.p>
                   </div>
 

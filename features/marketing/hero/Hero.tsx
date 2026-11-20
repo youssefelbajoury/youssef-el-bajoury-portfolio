@@ -11,6 +11,8 @@ import {
   HERO_COORDINATES,
   HERO_HEADLINE,
   HERO_HEADLINE_OPTICAL,
+  HERO_HEADLINE_TEXT,
+  HERO_POSITIONING,
   HERO_STATEMENT,
 } from "./heroContent";
 import {
@@ -25,6 +27,12 @@ import {
 import { ENTRANCE, PARALLAX, SCROLL_DEPTH } from "./heroMotion";
 
 import type { CSSProperties } from "react";
+
+const HEADLINE_DELAYS = [
+  ENTRANCE.headlineFirstLine,
+  ENTRANCE.headlineSecondLine,
+  ENTRANCE.headlineThirdLine,
+] as const;
 
 /**
  * The Hero.
@@ -270,30 +278,30 @@ export function Hero() {
               >
                 {/* Set at weight 500, not 600. Display type wants less weight
                     as it gets larger — at 100px a semibold grotesque clots,
-                    and the counters close up. */}
-                <h1 className="text-hero font-medium text-text-primary">
+                    and the counters close up. The cap is slightly lower than
+                    the old two-line headline's so the longer middle line still
+                    fits the same seven-column measure; family, weight, leading
+                    and tracking are unchanged. */}
+                <h1 className="font-medium text-[clamp(2.25rem,1.25rem_+_4vw,4.75rem)] leading-[0.93] tracking-[-0.035em] text-text-primary">
+                  <span className="sr-only">{HERO_HEADLINE_TEXT}</span>
                   {HERO_HEADLINE.map((line, index) => (
                     /* Two elements per line, and both are necessary. The outer
                        one clips; the inner one moves. A transform applied to a
                        clipped element carries its own clip along with it, so
                        the mask has to belong to a parent that does not move.
 
-                       The clip is inset only at the *bottom* edge (0), and
-                       given negative insets on the other three. Those negatives
-                       matter: `line-height: 0.93` makes the line box shorter
-                       than the glyphs it contains, so a plain `overflow-hidden`
-                       would shave the caps, and the 11px entry blur would be
-                       sliced off at the sides. The line rises out from behind
-                       its own baseline and nothing else is touched. */
+                       The clip keeps the same negative insets as before: the
+                       line-height is tighter than the glyphs, and the 11px
+                       entry blur must not be shaved at the sides. The line
+                       still rises out from behind its own baseline. */
                     <span
-                      key={line}
+                      key={index}
+                      aria-hidden
                       className="block"
                       /* The optical correction rides on the clipping element
-                         rather than the moving one, so the mask travels with the
-                         line and the entry animation is left holding a single
-                         transform. The clip's horizontal insets are negative
-                         (-12%), so pulling the box left by 0.087em cannot bring
-                         an edge in far enough to shave a glyph. */
+                         so the mask travels with the line and the moving inner
+                         span still holds one transform. The horizontal insets
+                         are negative, so a small pull left cannot clip a glyph. */
                       style={{
                         clipPath: "inset(-35% -12% 0 -12%)",
                         marginLeft: HERO_HEADLINE_OPTICAL[index],
@@ -301,13 +309,16 @@ export function Hero() {
                     >
                       <span
                         className="block animate-hero-line will-change-[transform,opacity,filter]"
-                        style={{
-                          animationDelay: `${
-                            index === 0 ? ENTRANCE.headlineFirstLine : ENTRANCE.headlineSecondLine
-                          }ms`,
-                        }}
+                        style={{ animationDelay: `${HEADLINE_DELAYS[index]}ms` }}
                       >
-                        {line}
+                        {line.map((segment, segmentIndex) => (
+                          <span
+                            key={segmentIndex}
+                            className={segment.accent ? "text-accent" : undefined}
+                          >
+                            {segment.text}
+                          </span>
+                        ))}
                       </span>
                     </span>
                   ))}
@@ -336,8 +347,19 @@ export function Hero() {
                   }}
                 />
 
+                {/* The position, in the machine voice: the same mono register
+                    as the coordinates and the frame labels. It sits between
+                    the rule and the human sentence so the two voices stay
+                    separate instead of competing in one paragraph. */}
                 <p
-                  className="mt-24 max-w-readable animate-hero-rise text-paragraph-lg text-text-secondary"
+                  className="mt-16 animate-hero-rise font-mono text-[11px] uppercase tracking-[0.14em] text-text-tertiary"
+                  style={{ animationDelay: `${ENTRANCE.positioning}ms` }}
+                >
+                  {HERO_POSITIONING}
+                </p>
+
+                <p
+                  className="mt-16 max-w-readable animate-hero-rise text-paragraph-lg text-text-secondary"
                   style={{ animationDelay: `${ENTRANCE.statement}ms` }}
                 >
                   {HERO_STATEMENT}

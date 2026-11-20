@@ -118,7 +118,7 @@ export function ResumeDocumentCard({ resume }: { resume: ResumeDocument }) {
         <div className="h-px w-full" style={{ backgroundColor: RULE_COLOR }} />
       </div>
 
-      <div className="mt-16 flex gap-8">
+      <div className="mt-16 flex flex-col gap-8 sm:flex-row">
         {/* Peers, and deliberately so. Neither action is the accent: the page
             allows one saturated object per composition, and two cards each
             offering a cyan control would make four. */}
@@ -129,7 +129,7 @@ export function ResumeDocumentCard({ resume }: { resume: ResumeDocument }) {
           style={RESUME_ACTION_STYLE}
           className={resumeActionClasses("compact", "min-w-0 flex-1")}
         >
-          Open
+          {resume.actionLabel}
           <ArrowUpRight
             aria-hidden
             className="size-16 transition-transform duration-medium ease-premium group-hover/action:translate-x-[2px] group-hover/action:translate-y-[-2px]"

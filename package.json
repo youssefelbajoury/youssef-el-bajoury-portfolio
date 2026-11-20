@@ -8,6 +8,9 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
+    "validate:kb": "node scripts/validate-assistant-kb.mjs",
+    "validate:images": "node scripts/validate-technology-images.mjs",
+    "check:secrets": "node scripts/check-no-public-secrets.mjs",
     "format": "prettier --write .",
     "prepare": "husky"
   },

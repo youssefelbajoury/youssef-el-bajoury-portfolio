@@ -5,24 +5,24 @@ import { motion, useReducedMotion } from "framer-motion";
 import { buildRevealVariants, REVEAL_VIEWPORT } from "@/components/shared/revealMotion";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 import { SectionShell } from "@/components/shared/SectionShell";
-import { SHOWCASE_PROJECTS } from "@/data/projects/projects";
+import { AUTOFLOW, MOROCCO_RETAIL, SHOWCASE_PROJECTS } from "@/data/projects/projects";
 import { CaseStudyProvider } from "@/features/showcase/case-studies";
 
 import { RolexExperienceShowcase } from "./components/RolexExperienceShowcase";
 import { SmartHealthRoomShowcase } from "./components/SmartHealthRoomShowcase";
+import { SystemProjectShowcase } from "./components/SystemProjectShowcase";
 import { WorkInProgressTile } from "./components/WorkInProgressTile";
 
 /**
  * Featured Projects.
  *
- * Two projects, each composed by hand rather than mapped over a shared card —
- * that is the point of the section. `SmartHealthRoomShowcase` and
- * `RolexExperienceShowcase` share primitives (TiltCard, LaptopMockup,
- * BrowserFrame, TechPill) but not a layout, so neither reads as the other one
- * retinted.
+ * Four projects, each composed by hand rather than mapped over a shared card —
+ * that is the point of the section. The two screenshot-led tiles and the two
+ * system tiles share primitives (TiltCard, LaptopMockup, BrowserFrame, TechPill)
+ * but not a layout, so none of them reads as another one retinted.
  *
- * Spacing is the section's other job: 8rem of air between projects, so each
- * one is read on its own rather than compared side by side.
+ * Spacing is the section's other job: 8rem of air between projects, so each one
+ * is read on its own rather than compared side by side.
  */
 export function ProjectShowcase() {
   const prefersReducedMotion = useReducedMotion();
@@ -41,8 +41,8 @@ export function ProjectShowcase() {
             index="01"
             kicker="Featured Projects"
             titleId="projects-title"
-            title="Two projects, end to end."
-            statement="Not a rail of thumbnails. Two systems I can walk through line by line — what the problem was, how the architecture answers it, and what I would build differently now."
+            title="Four projects, end to end."
+            statement="Not a rail of thumbnails. Four systems I can walk through line by line — what each one is, how its architecture is put together, and the evidence it produced."
           />
         </motion.div>
       </motion.div>
@@ -56,7 +56,9 @@ export function ProjectShowcase() {
       */}
       <CaseStudyProvider projects={SHOWCASE_PROJECTS}>
         <div className="mt-80 flex flex-col gap-128">
+          <SystemProjectShowcase project={AUTOFLOW} />
           <SmartHealthRoomShowcase />
+          <SystemProjectShowcase project={MOROCCO_RETAIL} />
           <RolexExperienceShowcase />
         </div>
       </CaseStudyProvider>

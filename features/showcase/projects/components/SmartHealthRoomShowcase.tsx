@@ -21,7 +21,7 @@ import type { CSSProperties } from "react";
  * pinned to opposite corners: a third sat over the render itself and obscured
  * the mobile assistant panel, which is the most legible part of the image.
  */
-const FLOATING = ["ESP32", "Real-time Telemetry"] as const;
+const FLOATING = ["ESP32", "Flutter"] as const;
 
 /**
  * Smart Health Room — the engineering personality of the pair.

@@ -23,8 +23,18 @@ import type { ReactNode } from "react";
  * stops being a document. Everything else — the material, the mono voice, the
  * rules — is unchanged, so the centre reads as an ending rather than as a
  * different site: same panel, same lamp, same hairlines, one saturated action.
+ *
+ * THE FORM IS A SLOT, NOT A SECOND SECTION. When a form is supplied it renders
+ * under the invitation inside the same card, separated by the same hairline as
+ * every other division on the page. The card is one object with two ways to
+ * use it: read the address, or write the message.
  */
-export function ContactPreview() {
+interface ContactPreviewProps {
+  /** The recruiter form, mounted under the invitation when present. */
+  form?: ReactNode;
+}
+
+export function ContactPreview({ form }: ContactPreviewProps = {}) {
   const prefersReducedMotion = useReducedMotion();
   const { container, item } = buildRevealVariants(prefersReducedMotion);
 
@@ -38,12 +48,12 @@ export function ContactPreview() {
       >
         <motion.div variants={item}>
           <SectionHeading
-            index="05"
+            index="08"
             kicker="Get In Touch"
             titleId="contact-title"
             align="center"
             title="Let’s talk about what’s next."
-            statement="I’m currently open to full-time opportunities where I can contribute as a full stack, IoT, or AI-focused engineer. If that sounds like a fit, I’d love to hear from you."
+            statement="I’m currently open to full-time roles and pre-employment internships where I can work across full stack development, AI and machine learning, big data and cloud, or connected systems. If that sounds like a fit, I’d love to hear from you."
           />
         </motion.div>
 
@@ -99,6 +109,14 @@ export function ContactPreview() {
                 Let’s Build Something Great
               </Button>
             </div>
+
+            {form ? (
+              <>
+                <div aria-hidden className="h-px w-full" style={{ backgroundColor: RULE_COLOR }} />
+
+                <div className="w-full">{form}</div>
+              </>
+            ) : null}
           </Card>
         </motion.div>
       </motion.div>

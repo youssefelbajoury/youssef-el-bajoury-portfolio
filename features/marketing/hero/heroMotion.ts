@@ -39,28 +39,30 @@ export const EASE_PREMIUM = "cubic-bezier(0.16, 1, 0.3, 1)";
  * rather than as a UI booting up, and it means the composition's structure is
  * legible at 0ms even on a slow connection.
  *
- * The stagger inside each group (line 2 after line 1, coordinates after the
- * availability line) is 60–90ms — long enough to read as sequence, short
- * enough that the pair still reads as one gesture.
+ * The stagger inside each group (each headline line after the previous one,
+ * coordinates after the availability line) is 60–90ms — long enough to read as
+ * sequence, short enough that the lines still read as one gesture.
  */
 export const ENTRANCE = {
   availability: 150,
   coordinates: 210,
   headlineFirstLine: 300,
   headlineSecondLine: 390,
-  ledeRule: 430,
-  statement: 450,
-  capabilityIndex: 600,
+  headlineThirdLine: 480,
+  ledeRule: 520,
+  positioning: 540,
+  statement: 570,
+  capabilityIndex: 700,
   /** Per-item stagger across the six domains. Six × 45ms = 225ms to sweep. */
   capabilityStep: 45,
-  primaryAction: 700,
-  secondaryAction: 760,
+  primaryAction: 800,
+  secondaryAction: 860,
   /* The resume trigger, on its own line under the pair above. 60ms after the
      GitHub control — the same in-group stagger used everywhere else — because
      the three of them are one gesture arriving, not two gestures and an
      afterthought. It still lands before the plate, which settles last. */
-  resumeAction: 820,
-  plate: 850,
+  resumeAction: 920,
+  plate: 950,
   /**
    * The plate's delay below `md`, where the composition puts it first.
    *

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import { BrainCircuit, Code2, FileText, Layers, Router } from "lucide-react";
+import { BrainCircuit, Cloud, Code2, Database, FileText, Layers, Router } from "lucide-react";
 import Image from "next/image";
 
 import { buildRevealVariants, REVEAL_VIEWPORT } from "@/components/shared/revealMotion";
@@ -24,6 +24,8 @@ const HIGHLIGHT_ICONS: Record<EngineeringHighlight["icon"], LucideIcon> = {
   iot: Router,
   ai: BrainCircuit,
   product: Layers,
+  cloud: Cloud,
+  data: Database,
 };
 
 /**
@@ -109,7 +111,7 @@ export function AboutPreview() {
 
         <motion.div
           variants={item}
-          className="mt-64 grid grid-cols-1 gap-16 sm:grid-cols-2 lg:grid-cols-4"
+          className="mt-64 grid grid-cols-1 gap-16 sm:grid-cols-2 lg:grid-cols-3"
         >
           {ENGINEERING_HIGHLIGHTS.map((highlight) => {
             const Icon = HIGHLIGHT_ICONS[highlight.icon];
@@ -211,7 +213,7 @@ function PortraitPlate() {
           {PROFILE.name}
         </p>
         <p className="mt-4 font-mono text-[11px] tracking-[0.14em] text-text-tertiary">
-          Software Engineer
+          {PROFILE.position}
         </p>
         <p className="font-mono text-[11px] tracking-[0.14em] text-text-tertiary">
           {PROFILE.location}

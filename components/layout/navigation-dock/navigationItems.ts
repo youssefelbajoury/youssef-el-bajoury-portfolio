@@ -43,9 +43,12 @@ export interface DockDestination {
  * scroll spy — the spy observes exactly these ids in exactly this order, so
  * the two can never drift apart.
  *
- * `experience` currently anchors the technical-skills section, which is the
- * closest thing the page has to a track record. Point it at a dedicated
- * Experience section by changing this one id when that section exists.
+ * `experience` anchors the dedicated Experience section (roles, education,
+ * languages, availability). `skills` is intentionally not a dock destination:
+ * it is a reference section, not a place a reader needs a shortcut to.
+ * `academic` is not one either: it is read in the same pass as `experience`,
+ * immediately below it, and a sixth station would overflow the dock on a
+ * narrow phone.
  */
 export const DOCK_DESTINATIONS: readonly DockDestination[] = [
   { id: "home", label: "Home", Icon: HouseIcon },
